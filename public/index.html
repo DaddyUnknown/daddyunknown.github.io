@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Clicker Empire - Telegram Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h2>💰 Clicker Empire</h2>
+                <p>Загрузка игры...</p>
+            </div>
+        </div>
+
+        <!-- Main Game Interface -->
+        <div id="game-container" class="game-container" style="display: none;">
+            <!-- Header -->
+            <header class="game-header">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name" id="user-name">Player</div>
+                        <div class="user-level">Уровень <span id="user-level">1</span></div>
+                    </div>
+                </div>
+                <div class="currency-display">
+                    <div class="coins">
+                        <i class="fas fa-coins"></i>
+                        <span id="coins-amount">0</span>
+                    </div>
+                    <div class="gems">
+                        <i class="fas fa-gem"></i>
+                        <span id="gems-amount">0</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs">
+                <button class="nav-tab active" data-tab="clicker">
+                    <i class="fas fa-hand-pointer"></i>
+                    <span>Кликер</span>
+                </button>
+                <button class="nav-tab" data-tab="upgrades">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Улучшения</span>
+                </button>
+                <button class="nav-tab" data-tab="business">
+                    <i class="fas fa-building"></i>
+                    <span>Бизнес</span>
+                </button>
+                <button class="nav-tab" data-tab="leaderboard">
+                    <i class="fas fa-trophy"></i>
+                    <span>Топ</span>
+                </button>
+                <button class="nav-tab" data-tab="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Профиль</span>
+                </button>
+            </nav>
+
+            <!-- Tab Contents -->
+            <main class="tab-content">
+                <!-- Clicker Tab -->
+                <div id="clicker-tab" class="tab-pane active">
+                    <div class="clicker-section">
+                        <div class="click-area">
+                            <button id="click-button" class="click-button">
+                                <div class="coin-icon">💰</div>
+                                <div class="click-power">+<span id="click-power">1</span></div>
+                            </button>
+                        </div>
+                        
+                        <div class="progress-section">
+                            <div class="experience-bar">
+                                <div class="exp-label">Опыт: <span id="current-exp">0</span> / <span id="next-level-exp">100</span></div>
+                                <div class="exp-bar">
+                                    <div id="exp-progress" class="exp-fill"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="auto-income-section">
+                            <div class="auto-income-display">
+                                <i class="fas fa-robot"></i>
+                                <span>Авто доход: <span id="auto-income">0</span>/час</span>
+                                <button id="collect-auto" class="collect-btn" style="display: none;">Собрать</button>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="total-clicks">0</div>
+                                <div class="stat-label">Всего кликов</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="total-earned">0</div>
+                                <div class="stat-label">Всего заработано</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upgrades Tab -->
+                <div id="upgrades-tab" class="tab-pane">
+                    <div class="upgrades-section">
+                        <h3>🚀 Улучшения</h3>
+                        <div id="upgrades-list" class="upgrades-list">
+                            <!-- Upgrades will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Tab -->
+                <div id="business-tab" class="tab-pane">
+                    <div class="business-section">
+                        <h3>🏢 Бизнес</h3>
+                        <div id="business-list" class="business-list">
+                            <!-- Businesses will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Tab -->
+                <div id="leaderboard-tab" class="tab-pane">
+                    <div class="leaderboard-section">
+                        <div class="leaderboard-tabs">
+                            <button class="lb-tab active" data-type="coins">💰 Монеты</button>
+                            <button class="lb-tab" data-type="level">📈 Уровень</button>
+                            <button class="lb-tab" data-type="clicks">👆 Клики</button>
+                            <button class="lb-tab" data-type="prestige">👑 Престиж</button>
+                        </div>
+                        <div id="leaderboard-list" class="leaderboard-list">
+                            <!-- Leaderboard will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Tab -->
+                <div id="profile-tab" class="tab-pane">
+                    <div class="profile-section">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h3 id="profile-name">Player</h3>
+                                <div class="profile-stats">
+                                    <div class="profile-stat">
+                                        <span class="stat-label">Уровень:</span>
+                                        <span id="profile-level">1</span>
+                                    </div>
+                                    <div class="profile-stat">
+                                        <span class="stat-label">Престиж:</span>
+                                        <span id="profile-prestige">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="profile-actions">
+                            <button id="transfer-btn" class="action-btn">
+                                <i class="fas fa-exchange-alt"></i>
+                                Перевести монеты
+                            </button>
+                            <button id="prestige-btn" class="action-btn prestige-btn">
+                                <i class="fas fa-crown"></i>
+                                Перерождение
+                            </button>
+                            <button id="transactions-btn" class="action-btn">
+                                <i class="fas fa-history"></i>
+                                История транзакций
+                            </button>
+                        </div>
+
+                        <div class="achievements-section">
+                            <h4>🏆 Достижения</h4>
+                            <div id="achievements-list" class="achievements-list">
+                                <!-- Achievements will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Modals -->
+        <div id="modal-overlay" class="modal-overlay">
+            <div id="modal-content" class="modal-content">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Floating Messages -->
+        <div id="floating-messages" class="floating-messages"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
